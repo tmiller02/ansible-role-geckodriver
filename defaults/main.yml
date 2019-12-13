@@ -1,0 +1,4 @@
+---
+
+geckodriver_version: "0.26.0"
+geckodriver_prefix: "/usr/local/bin"

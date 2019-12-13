@@ -1,0 +1,31 @@
+---
+
+- name: stat geckodriver
+  stat:
+    path: "{{ geckodriver_prefix }}/geckodriver"
+  register: geckodriver_stat
+
+- name: get geckodriver version
+  block:
+    - name: get geckodriver version output
+      command: "{{ geckodriver_prefix }}/geckodriver --version"
+      register: geckodriver_version_command_full_output
+      changed_when: false
+    - name: get geckodriver installed version
+      command:
+        cmd: awk 'NR==1 {print $2}'
+        stdin: "{{ geckodriver_version_command_full_output.stdout }}"
+      register: geckodriver_installed_version
+      changed_when: false
+  when: geckodriver_stat.stat.exists
+
+- name: download geckodriver
+  become: yes
+  unarchive:
+    remote_src: true
+    src: "https://github.com/mozilla/geckodriver/releases/download/v{{ geckodriver_version }}/geckodriver-v{{ geckodriver_version }}-linux{{ ansible_userspace_bits }}.tar.gz"  # noqa 204
+    dest: "{{ geckodriver_prefix }}"
+    mode: "u=rwx,g=rx,o=rx"
+    owner: root
+    group: root
+  when: not geckodriver_stat.stat.exists or geckodriver_installed_version.stdout != geckodriver_version

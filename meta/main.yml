@@ -1,0 +1,23 @@
+---
+
+dependencies: []
+
+galaxy_info:
+  role_name: geckodriver
+  author: Tom Miller
+  description: Installs geckodriver, the WebDriver for Firefox
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: EL
+      versions:
+        - 7
+    - name: Ubuntu
+      versions:
+        - bionic
+        - disco dingo
+    - name: Debian
+      versions:
+        - stretch
+        - buster
+  galaxy_tags: []
